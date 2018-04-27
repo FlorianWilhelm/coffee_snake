@@ -1,0 +1,42 @@
+group 'com.company'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile fileTree(dir: 'venv/lib/python3.5/site-packages/jep', include: '*.jar')
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+jar {
+    manifest {
+        attributes("Main-Class": "coffee_snake.Main")
+    }
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+   from('venv/lib/python3.5/site-packages/jep/') {
+       include '*.so'
+   }
+
+   from('venv/lib') {
+       include '*.so.*'
+   }
+}
+/*This will include the venv in the JAR
+sourceSets {
+    main {
+        resources {
+            srcDirs "src/main/resources", "venv"
+        }
+    }
+}
+*/
